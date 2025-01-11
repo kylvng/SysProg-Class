@@ -23,19 +23,22 @@ Please provide answers to these questions using markdown notation and place them
 
     - [ ] drexel's tux cluster
     - [ ] WSL on Windows
-    - [ ] Orbstack on MacOs
+    - [X] Orbstack on MacOs
     - [ ] VMWare Fusion
     - [ ] Somthing else (put name here)
 
 2. I have installed my virtual machine, tested it, feel comfortable using it, and validated that the required software is installed:
 
-    - [ ] YES
+    - [X] YES
     - [ ] N/A - I plan to use tux
     - [ ] NO - Not Yet
 
 
 3. Please provide a link to the repository you are using for this class.
+https://github.com/kylvng/SysProg-Class
 
 4. Briefly describe what you want to get out of this class.
+I want to learn to develop software to connect the low-level computer hardware to high-level, user-facing application software.
 
 5. Briefly describe any concerns you might be having with being successful in this class (if any).
+Keeping up with the class. Fast pace class.
