@@ -13,64 +13,54 @@ int  setup_buff(char *, char *, int);
 //prototypes for functions to handle required functionality
 int  count_words(char *, int);
 
-char* reverse(char *, int);
+void reverse(char *, int);
 
 void word_print(char *, int);
 //add additional prototypes here
 
 
 int setup_buff(char *buff, char *user_str, int len){
-    //TODO: #4:  Implement the setup buff as per the directions
-
     int user_str_size = 0;
     char *user_str_pointer = user_str;
+    int last_char_was_space = 1; // Start with 1 to ignore leading spaces
+
     while (*user_str_pointer != '\0'){
-        user_str_size++;
-        user_str_pointer++;
-    }
-    if (user_str_size > len){
-        return -1; //   user string is too large
-    }
-    
-    int buff_idx = 0;
-
-    // Flag to track consecutive whitespace
-    int last_char_was_space = 0;
-
-    for(int i = 0; i < user_str_size; i++){
-        char c = user_str[i];
-        if (c == ' ' || c == '\t') {
+        if (*user_str_pointer == ' ' || *user_str_pointer == '\t') {
             if (!last_char_was_space) {
-                buff[buff_idx] = ' ';
-                buff_idx++;
+                buff[user_str_size++] = ' ';
                 last_char_was_space = 1;
             }
         } else {
-            buff[buff_idx] = c;
-            buff_idx++;
+            buff[user_str_size++] = *user_str_pointer;
             last_char_was_space = 0;
         }
+        user_str_pointer++;
     }
 
-    if (buff_idx > 0 && buff[buff_idx-1] == ' '){ // Remove trailing whitespace
-        buff_idx--;
-    } 
-
-    int user_str_len = buff_idx;
-    while (buff_idx < len-1){
-        buff[buff_idx] = '.';
-        buff_idx++;
+    // Remove trailing space if any
+    if (user_str_size > 0 && buff[user_str_size - 1] == ' ') {
+        user_str_size--;
     }
-    buff[buff_idx] = '\0';
+
+    int user_str_len = user_str_size;
+    if (user_str_len > len){
+        exit(1);
+    }
+    while (user_str_size < len){
+        buff[user_str_size] = '.';
+        user_str_size++;
+    }
+    buff[user_str_size] = '\0';
 
     return user_str_len; 
 }
 
 void print_buff(char *buff, int len){
-    printf("Buffer:  ");
+    printf("Buffer:  [");
     for (int i=0; i<len; i++){
         putchar(*(buff+i));
     }
+    printf("]");
     putchar('\n');
 }
 
@@ -98,25 +88,17 @@ int count_words(char *buff, int str_len){
     return word_count;
 }
 
-char* reverse(char *buff, int len){
+void reverse(char *buff, int len){
     //YOU MUST IMPLEMENT
-    char* buff_copy = (char*)malloc(len + 1);
-    for (int i = 0; i < len; i++) {
-        buff_copy[i] = buff[i];
-    }
-    buff_copy[len] = '\0'; 
-
     int left = 0;
     int right = len - 1;
     while (left < right) {
-        char temp = buff_copy[left];
-        buff_copy[left] = buff_copy[right];
-        buff_copy[right] = temp;
+        char temp = buff[left];
+        buff[left] = buff[right];
+        buff[right] = temp;
         left++;
         right--;
     }
-
-    return buff_copy;
 }
 
 void word_print(char *buff, int len){   
@@ -148,8 +130,9 @@ void word_print(char *buff, int len){
         }
         word[word_length] = '\0';
 
-        printf("%s (%d)\n", word, word_length);
+        printf("%s(%d)\n", word, word_length);
     }
+    printf("\nNumber of words returned: %d\n", column_num - 1);
 }
 
 //ADD OTHER HELPER FUNCTIONS HERE FOR OTHER REQUIRED PROGRAM OPTIONS
@@ -229,16 +212,10 @@ int main(int argc, char *argv[]){
         //TODO:  #5 Implement the other cases for 'r' and 'w' by extending
         //       the case statement options
 
-        case 'r':
-            char* reversed_buff = reverse(buff, user_str_len);
-            if (reversed_buff != NULL) {
-                printf("Reversed String: %s\n", reversed_buff);
-                free(reversed_buff);
-            } else {
-                printf("Memory allocation failed\n");
-                exit(2);
-            }
+        case 'r': {
+            reverse(buff, user_str_len);
             break;
+        }
         
         case 'w':
             word_print(buff, user_str_len);
@@ -255,7 +232,7 @@ int main(int argc, char *argv[]){
 
         default:
             usage(argv[0]);
-            exit(2);
+            exit(1);
     }
 
     //TODO:  #6 Dont forget to free your buffer before exiting
