@@ -227,7 +227,8 @@ int main(int argc, char *argv[]){
                 exit(1);
             }
 
-            printf("Not yet implemented!\n");
+            printf("Not Implemented!\n");
+            exit(0);
             break;
 
         default:
